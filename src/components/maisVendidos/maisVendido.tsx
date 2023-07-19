@@ -38,7 +38,8 @@ const StyledContainer = styled.div`
     font-size: 16px;
     color: green;
     border:  3px solid ;
-    
+    background: transparent;
+    cursor: pointer;
   }
 `;
 const StyledVendidos = styled.ul`

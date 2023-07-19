@@ -1,5 +1,7 @@
 "use client";
 
+import CategoriaHooks from "@/hooks/categoria";
+import { TypesCategoria } from "@/types/types-categoria";
 import React from "react";
 import { styled } from "styled-components";
 
@@ -29,15 +31,35 @@ const Itens = styled.li<CategoriaProps>`
 `;
 
 const Categorias = () => {
+  const { type, setType} = CategoriaHooks();
+
+  const HandleClick = (value : TypesCategoria) => {
+    setType(value)
+  }
+
   return (
     <div>
       <Categoria>
-        <Itens selected>MASCULINO</Itens>
-        <Itens selected={false}>INFANTIL</Itens>
-        <Itens selected={false}>FEMININO</Itens>
-        <Itens selected={false}>LANÇAMENTOS</Itens>
-        <Itens selected={false}>OFERTAS</Itens>
-        <Itens selected={false}>PROMOÇÃO</Itens>
+        <Itens 
+        selected={type === TypesCategoria.MASCULINO}
+        onClick={() => HandleClick(TypesCategoria.MASCULINO)}
+        >MASCULINO</Itens>
+        <Itens 
+        selected={type === TypesCategoria.INFANTIL}
+        onClick={() => HandleClick(TypesCategoria.INFANTIL)}
+        >INFANTIL</Itens>
+        <Itens
+        selected={type === TypesCategoria.FEMININO}
+        onClick={() => HandleClick(TypesCategoria.FEMININO)}
+        >FEMININO</Itens>
+        <Itens 
+        selected={type === TypesCategoria.LANÇAMENTOS}
+        onClick={() => HandleClick(TypesCategoria.LANÇAMENTOS)}
+        >LANÇAMENTOS</Itens>
+        <Itens 
+        selected={type === TypesCategoria.PROMOÇÃO}
+        onClick={() => HandleClick(TypesCategoria.PROMOÇÃO)}
+        >PROMOÇÃO</Itens>
       </Categoria>
     </div>
   );

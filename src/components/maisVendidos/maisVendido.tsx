@@ -1,4 +1,8 @@
 "use client";
+import { CategoriaContext } from "@/context/categoria";
+import CategoriaHooks from "@/hooks/categoria";
+import { TypesCategoria } from "@/types/types-categoria";
+import { TypesMaisVendidos } from "@/types/types-maisVendidos";
 import React, { useState } from "react";
 import { styled } from "styled-components";
 
@@ -33,20 +37,29 @@ const StyledContainer = styled.div`
   height: 78px;
   gap: 32px;
   button {
-    width: 160px;
+    width: 180px;
     height: 40px;
     font-size: 16px;
-    color: green;
-    border:  3px solid ;
+    color: black;
+    border: transparent;
     background: transparent;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3);
     cursor: pointer;
+
+    svg{
+        margin-left: 12px;
+
+    }
   }
 `;
 const StyledVendidos = styled.ul`
   position: absolute;
-  width: 160px;
-  height: 76px;
-  background-color: #b6edb8;
+  width: 180px;
+  padding: 0 6px;
+  height: 86px;
+  background-color: #ffffff;
+  box-shadow:  0px 8px 12px rgba(0, 0, 0, 0.3);
   list-style: none;
   cursor: pointer;
 `;
@@ -54,6 +67,12 @@ const StyledVendidos = styled.ul`
 const MaisVendidos = (props: MaisVendidosProps) => {
   const [abri, setAbri] = useState(false);
 
+  const {setMais} = CategoriaHooks();
+  
+  const handleMais = (value: TypesMaisVendidos) => {
+     setMais(value)
+     setAbri(false)
+  }
   const handleOPens = () => setAbri((prev) => !prev);
 
   return (
@@ -65,9 +84,9 @@ const MaisVendidos = (props: MaisVendidosProps) => {
         </button>
         {abri && 
         <StyledVendidos>
-            <li>Mais Vendidos</li>
-            <li>Preço: Maior - menor </li>
-            <li>Preço: Menor - maior</li>
+            <li onClick={() => handleMais(TypesMaisVendidos["MAIS-VENDIDO"])} >Mais Vendidos</li>
+            <li onClick={() => handleMais(TypesMaisVendidos["MAIOR-PREÇO"])} >Preço: Maior - menor </li>
+            <li onClick={() => handleMais(TypesMaisVendidos["MENOR-PREÇO"])} >Preço: Menor - maior</li>
         </StyledVendidos>}
       </div>
     </StyledContainer>

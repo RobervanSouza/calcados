@@ -26,5 +26,5 @@ export const StyledNavegacao = styled.div`
   align-items:center;
   display: flex;
   border-radius: 15px;
-  
+  overflow: hidden;
 `;

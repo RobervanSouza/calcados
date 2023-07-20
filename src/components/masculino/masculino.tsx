@@ -28,16 +28,17 @@ const CardContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-color: #b9faa7;
+  border: 1px solid black;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 `;
 
 const ImageWrapper = styled.div`
-  width: 190px;
-  height: 190px;
+  width: 220px;
+  height: 210px;
+  margin-top: -13px;
   overflow: hidden;
   border-radius: 8px;
   margin-bottom: 12px;
@@ -52,11 +53,13 @@ const CardImage = styled.img`
 const CardTitle = styled.h2`
   font-size: 14px;
   margin-bottom: 8px;
+  color: #656564;
 `;
 
 const CardPrice = styled.p`
-  font-size: 8px;
+  font-size: 18px;
   font-weight: bold;
+  color: #2bad0a;
 `;
 
 const CardDescription = styled.p`
@@ -85,17 +88,18 @@ const CalcadoMasculino: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <>
       {calcadoMasculinoList.map((calcado) => (
         <CardContainer key={calcado._id}>
           <ImageWrapper>
             <CardImage src={calcado.imageUrl} alt={calcado.nome} />
           </ImageWrapper>
           <CardTitle>{calcado.nome}</CardTitle>
-          <CardPrice>Preço: R${calcado.preco}</CardPrice>
+          <CardPrice>R${calcado.preco}</CardPrice>
         </CardContainer>
       ))}
-    </div>
+    
+      </>
   );
 };
 

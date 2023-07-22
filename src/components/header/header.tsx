@@ -32,6 +32,7 @@ const Header = () => {
           </S.StyledNavegacao>
         </div>
       </S.StyledHeader>
+    
     </div>
   );
 };

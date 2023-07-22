@@ -39,6 +39,7 @@ export function Carrinho() {
         <IconeCarrinho />
         {value.length && <StyledCount> {value.length} </StyledCount>}
       </StyledContainer>
+      
     </div>
   );
 }

@@ -5,8 +5,8 @@ import Categorias from "@/components/header/categorias";
 import MaisVendidos from "@/components/maisVendidos/maisVendido";
 import CalcadoMasculino from "@/components/masculino/masculino";
 import { styled } from "styled-components";
-import Desconto from "@/components/desconto/desconto";
-import ExampleComponent from "@/components/desconto/valorDesconto";
+
+
 
 export const StyledContainer = styled.div`
   padding: 1rem;
@@ -25,7 +25,7 @@ export default function Home() {
       <MaisVendidos />
       
         
-      <ExampleComponent/>
+     
       
       <StyledContainer>
         <CalcadoMasculino />

@@ -61,7 +61,7 @@ const CardTitle = styled.h2`
 const CardPrice = styled.p`
   font-size: 18px;
   font-weight: bold;
-  color: #6b7669;
+  color: #289915;
 `;
 
 const CardPrecoOriginal = styled.p`

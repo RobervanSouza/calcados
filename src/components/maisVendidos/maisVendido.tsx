@@ -36,6 +36,7 @@ const StyledContainer = styled.div`
   width: 223px;
   height: 78px;
   gap: 32px;
+  z-index: 9999;
   button {
     width: 180px;
     height: 40px;

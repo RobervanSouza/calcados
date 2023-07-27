@@ -5,6 +5,7 @@ import Categorias from "@/components/header/categorias";
 import MaisVendidos from "@/components/maisVendidos/maisVendido";
 import CalcadoMasculino from "@/components/masculino/masculino";
 import { styled } from "styled-components";
+import Link from "next/link";
 
 
 
@@ -23,13 +24,10 @@ export default function Home() {
   return (
     <main>
       <MaisVendidos />
-      
-        
-     
-      
       <StyledContainer>
         <CalcadoMasculino />
       </StyledContainer>
+
     </main>
   );
 }

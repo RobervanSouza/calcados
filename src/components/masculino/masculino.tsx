@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled, { keyframes } from "styled-components";
+import Link from "next/link";
 
 interface CalcadoMasculino {
   _id: string;
@@ -167,8 +168,6 @@ const StiledLancamento = styled.div`
   animation: ${pulseAnimation as unknown as string} 8s infinite;
 `;
 
-
-
 const CalcadoMasculino: React.FC = () => {
   const [calcadoMasculinoList, setCalcadoMasculinoList] = useState<
     CalcadoMasculino[]
@@ -190,67 +189,62 @@ const CalcadoMasculino: React.FC = () => {
     fetchCalcadoMasculino();
   }, []);
 
-
   const calcularPrecoComDesconto = (preco: number, desconto: number) => {
     return preco * (1 - desconto / 100);
   };
- 
 
-    const calcularParcelas = (precoComDesconto: number, parcelas: number) => {
-      return precoComDesconto / parcelas;
-    };
-
-
-
-
+  const calcularParcelas = (precoComDesconto: number, parcelas: number) => {
+    return precoComDesconto / parcelas;
+  };
 
   return (
-    <>
-      {calcadoMasculinoList.map((calcado) => {
-        const precoComDesconto = calcularPrecoComDesconto(
-          calcado.preco,
-          calcado.desconto
-          
-        );
-        
-         const valorParcela = calcularParcelas(
-           precoComDesconto,
-           calcado.parcelas
-         );
+    
+      <>
+        {calcadoMasculinoList.map((calcado) => {
+          const precoComDesconto = calcularPrecoComDesconto(
+            calcado.preco,
+            calcado.desconto
+          );
 
+          const valorParcela = calcularParcelas(
+            precoComDesconto,
+            calcado.parcelas
+          );
 
-        return (
-          <CardContainer key={calcado._id}>
-            <StiledDesconto>
-              <div>
-                <span>
-                  <p>{calcado.desconto}%</p>
-                  <p>OFF</p>
-                </span>
-              </div>
-            </StiledDesconto>
+          return (
+            <CardContainer key={calcado._id}>
+              <StiledDesconto>
+                <div>
+                  <span>
+                    <p>{calcado.desconto}%</p>
+                    <p>OFF</p>
+                  </span>
+                </div>
+              </StiledDesconto>
 
-            {calcado.lancamento && (
-              <StiledLancamento>
-                <p>LANÇAMENTO</p>
-              </StiledLancamento>
-            )}
+              {calcado.lancamento && (
+                <StiledLancamento>
+                  <p>LANÇAMENTO</p>
+                </StiledLancamento>
+              )}
 
-            <ImageWrapper>
-              <CardImage src={calcado.imageUrl} alt={calcado.nome} />
-            </ImageWrapper>
-            <CardTitle>{calcado.nome}</CardTitle>
-            <CardPrecoOriginal>
-              <p> De: R${calcado.preco.toFixed(2)}</p>
-            </CardPrecoOriginal>
-            <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
-            <CardParcelas>
-              {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
-            </CardParcelas>
-          </CardContainer>
-        );
-      })}
-    </>
+              <ImageWrapper>
+                <CardImage src={calcado.imageUrl} alt={calcado.nome} />
+              </ImageWrapper>
+              <CardTitle>{calcado.nome}</CardTitle>
+              <CardPrecoOriginal>
+                <p> De: R${calcado.preco.toFixed(2)}</p>
+              </CardPrecoOriginal>
+              <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
+              <CardParcelas>
+                {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
+              </CardParcelas>
+              <Link href={`/detalhes`}>Ver detalhes</Link>
+            </CardContainer>
+          );
+        })}
+      </>
+  
   );
 };
 

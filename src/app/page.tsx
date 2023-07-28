@@ -6,6 +6,7 @@ import MaisVendidos from "@/components/maisVendidos/maisVendido";
 import CalcadoMasculino from "@/components/masculino/masculino";
 import { styled } from "styled-components";
 import Link from "next/link";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 
@@ -21,13 +22,18 @@ export const StyledContainer = styled.div`
 
 
 export default function Home() {
+  const client = new QueryClient();
+
   return (
     <main>
-      <MaisVendidos />
-      <StyledContainer>
-        <CalcadoMasculino />
-      </StyledContainer>
-
-    </main>
+      <>
+        <QueryClientProvider client={client}>
+        <MaisVendidos />
+        <StyledContainer>
+          <CalcadoMasculino />
+        </StyledContainer>
+    </QueryClientProvider>
+      </>
+      </main>
   );
 }

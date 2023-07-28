@@ -239,7 +239,11 @@ const CalcadoMasculino: React.FC = () => {
               <CardParcelas>
                 {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
               </CardParcelas>
-              <Link href={`/detalhes`}>Ver detalhes</Link>
+              {/* <Link href={`/detalhes`}>Ver detalhes</Link> */}
+
+  <Link href={`/detalhes?id=${calcado._id}`}>Ver detalhes</Link>
+
+
             </CardContainer>
           );
         })}

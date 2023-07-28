@@ -198,57 +198,53 @@ const CalcadoMasculino: React.FC = () => {
   };
 
   return (
-    
-      <>
-        {calcadoMasculinoList.map((calcado) => {
-          const precoComDesconto = calcularPrecoComDesconto(
-            calcado.preco,
-            calcado.desconto
-          );
+    <>
+      {calcadoMasculinoList.map((calcado) => {
+        const precoComDesconto = calcularPrecoComDesconto(
+          calcado.preco,
+          calcado.desconto
+        );
 
-          const valorParcela = calcularParcelas(
-            precoComDesconto,
-            calcado.parcelas
-          );
+        const valorParcela = calcularParcelas(
+          precoComDesconto,
+          calcado.parcelas
+        );
 
-          return (
-            <CardContainer key={calcado._id}>
-              <StiledDesconto>
-                <div>
-                  <span>
-                    <p>{calcado.desconto}%</p>
-                    <p>OFF</p>
-                  </span>
-                </div>
-              </StiledDesconto>
+        return (
+          <CardContainer key={calcado._id}>
+            <StiledDesconto>
+              <div>
+                <span>
+                  <p>{calcado.desconto}%</p>
+                  <p>OFF</p>
+                </span>
+              </div>
+            </StiledDesconto>
 
-              {calcado.lancamento && (
-                <StiledLancamento>
-                  <p>LANÇAMENTO</p>
-                </StiledLancamento>
-              )}
+            {calcado.lancamento && (
+              <StiledLancamento>
+                <p>LANÇAMENTO</p>
+              </StiledLancamento>
+            )}
 
-              <ImageWrapper>
-                <CardImage src={calcado.imageUrl} alt={calcado.nome} />
-              </ImageWrapper>
-              <CardTitle>{calcado.nome}</CardTitle>
-              <CardPrecoOriginal>
-                <p> De: R${calcado.preco.toFixed(2)}</p>
-              </CardPrecoOriginal>
-              <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
-              <CardParcelas>
-                {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
-              </CardParcelas>
-              {/* <Link href={`/detalhes`}>Ver detalhes</Link> */}
+            <ImageWrapper>
+              <CardImage src={calcado.imageUrl} alt={calcado.nome} />
+            </ImageWrapper>
+            <CardTitle>{calcado.nome}</CardTitle>
+            <CardPrecoOriginal>
+              <p> De: R${calcado.preco.toFixed(2)}</p>
+            </CardPrecoOriginal>
+            <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
+            <CardParcelas>
+              {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
+            </CardParcelas>
+            {/* <Link href={`/detalhes`}>Ver detalhes</Link> */}
 
-  <Link href={`/detalhes?id=${calcado._id}`}>Ver detalhes</Link>
-
-
-            </CardContainer>
-          );
-        })}
-      </>
-  
+            <Link href={`/detalhes?id=${calcado._id}`}>Ver detalhes</Link>
+          </CardContainer>
+        );
+      })}
+    </>
   );
 };
 

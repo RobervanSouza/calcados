@@ -1,21 +1,25 @@
 'use client'
-// Importe os componentes e hooks necessários
-import { useDetalhes } from '@/hooks/detalhes';
-import React from 'react';
+import { useDetalhes } from "@/hooks/detalhes";
+import React from "react";
 
 import styled from "styled-components";
 
 const CardPrice = styled.p`
-  font-size: 18px;
+  font-size: 28px;
+  width: 123px;
+  margin-left: 128px;
+  margin-top: 123px;
   font-weight: bold;
-  color: #289915;
+  color: black;
+  border: 2px solid red;
+  background-color: green;
 `;
-// ... (seu código importando os componentes e hooks necessários)
-
 const Detalhes = ({ searchParams }: { searchParams: { id: string } }) => {
-  const { data, isError, error } = useDetalhes(searchParams.id);
+  const { data, error, status } = useDetalhes(searchParams.id);
 
-  if (isError) {
+  console.log(data, "id");
+
+  if (error) {
     return <div>Ocorreu um erro ao carregar os detalhes do produto.</div>;
   }
 
@@ -26,14 +30,10 @@ const Detalhes = ({ searchParams }: { searchParams: { id: string } }) => {
   return (
     <div>
       <h1>Detalhes do Produto</h1>
-      {data.product ? (
-        <>
-          <p>{data.product.nome}</p>
-          {/* Acessando outras propriedades do objeto 'data.product' */}
-        </>
-      ) : (
-        <p>Nome do Produto Desconhecido</p>
-      )}
+      <CardPrice>{data.nome}
+      
+      </CardPrice>
+      
     </div>
   );
 };

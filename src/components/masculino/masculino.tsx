@@ -228,7 +228,7 @@ const CalcadoMasculino: React.FC = () => {
             )}
 
             <ImageWrapper>
-              <CardImage src={calcado.imageUrl} alt={calcado.nome} />
+              <CardImage src={calcado.imageUrl[0]} alt={calcado.nome} />
             </ImageWrapper>
             <CardTitle>{calcado.nome}</CardTitle>
             <CardPrecoOriginal>

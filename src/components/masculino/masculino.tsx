@@ -22,6 +22,25 @@ interface CalcadoMasculino {
   parcelas: number;
 }
 
+const LoadingSpinner = styled.div`
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #3498db;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 const CardContainer = styled.div`
   width: 250px;
   height: 340px;
@@ -144,6 +163,7 @@ const pulseAnimation = keyframes`
   }
 `;
 
+
 const StiledLancamento = styled.div`
   display: flex;
   align-items: center;
@@ -173,6 +193,8 @@ const CalcadoMasculino: React.FC = () => {
     CalcadoMasculino[]
   >([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchCalcadoMasculino = async () => {
       try {
@@ -181,13 +203,19 @@ const CalcadoMasculino: React.FC = () => {
         );
         const data = response.data.data;
         setCalcadoMasculinoList(data);
+         setLoading(false);
       } catch (error) {
         console.error("Erro ao obter os dados do calcadoMasculino:", error);
+         setLoading(false);
+
       }
     };
 
     fetchCalcadoMasculino();
   }, []);
+
+
+  
 
   const calcularPrecoComDesconto = (preco: number, desconto: number) => {
     return preco * (1 - desconto / 100);
@@ -199,53 +227,67 @@ const CalcadoMasculino: React.FC = () => {
 
   return (
     <>
-      {calcadoMasculinoList.map((calcado) => {
-        const precoComDesconto = calcularPrecoComDesconto(
-          calcado.preco,
-          calcado.desconto
-        );
+      {loading ? (
+        <LoadingSpinner/>
+        
+      ) : (
+        calcadoMasculinoList.map((calcado) => {
+          const precoComDesconto = calcularPrecoComDesconto(
+            calcado.preco,
+            calcado.desconto
+          );
 
-        const valorParcela = calcularParcelas(
-          precoComDesconto,
-          calcado.parcelas
-        );
+          const valorParcela = calcularParcelas(
+            precoComDesconto,
+            calcado.parcelas
+          );
 
-        return (
-          <CardContainer key={calcado._id}>
-            <StiledDesconto>
-              <div>
-                <span>
-                  <p>{calcado.desconto}%</p>
-                  <p>OFF</p>
-                </span>
-              </div>
-            </StiledDesconto>
+          return (
+            <CardContainer key={calcado._id}>
+              {calcado.desconto > 0 && (
+                <StiledDesconto>
+                  <div>
+                    <span>
+                      <p>{calcado.desconto}%</p>
+                      <p>OFF</p>
+                    </span>
+                  </div>
+                </StiledDesconto>
+              )}
 
-            {calcado.lancamento && (
-              <StiledLancamento>
-                <p>LANÇAMENTO</p>
-              </StiledLancamento>
-            )}
+              {calcado.lancamento && (
+                <StiledLancamento>
+                  <p>LANÇAMENTO</p>
+                </StiledLancamento>
+              )}
 
-            <ImageWrapper>
-              <CardImage src={calcado.imageUrl[0]} alt={calcado.nome} />
-            </ImageWrapper>
-            <CardTitle>{calcado.nome}</CardTitle>
-            <CardPrecoOriginal>
-              <p> De: R${calcado.preco.toFixed(2)}</p>
-            </CardPrecoOriginal>
-            <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
-            <CardParcelas>
-              {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
-            </CardParcelas>
-            {/* <Link href={`/detalhes`}>Ver detalhes</Link> */}
+              <ImageWrapper>
+                <CardImage src={calcado.imageUrl[0]} alt={calcado.nome} />
+              </ImageWrapper>
+              <CardTitle>{calcado.nome}</CardTitle>
 
-            <Link href={`/detalhes?id=${calcado._id}`}>Ver detalhes</Link>
-          </CardContainer>
-        );
-      })}
+              {calcado.desconto > 0 && (
+                <CardPrecoOriginal>
+                  <p> De: R${calcado.preco.toFixed(2)}</p>
+                </CardPrecoOriginal>
+              )}
+
+              <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
+
+              {calcado.parcelas > 0 && ( // Only render if there are more than 1 parcel
+                <CardParcelas>
+                  {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
+                </CardParcelas>
+              )}
+
+              <Link href={`/detalhes?id=${calcado._id}`}>Ver detalhes</Link>
+            </CardContainer>
+          );
+        })
+      )}
     </>
   );
 };
 
 export default CalcadoMasculino;
+ 

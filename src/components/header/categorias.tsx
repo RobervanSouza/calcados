@@ -15,6 +15,7 @@ const Categoria = styled.ul`
   justify-content: center;
   gap: 9px;
   list-style: none;
+  
 `;
 const Itens = styled.li<CategoriaProps>`
   flex: 1; /* Permite que os itens ocupem espaço disponível igualmente */

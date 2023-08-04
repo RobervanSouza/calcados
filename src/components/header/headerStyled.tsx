@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 export const StyledHeader = styled.header`
 
  width: 100vw;
- height: 70px;
+ height: 90px;
  display: flex;
  align-items: center;
 
@@ -17,7 +17,7 @@ export const StyledLogo = styled.div`
 
 
 export const StyledNavegacao = styled.div`
-  border: 2px solid black;
+ 
   width: 78vw;
   height: 60px;
   padding: 10px 46px;

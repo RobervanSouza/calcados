@@ -27,7 +27,6 @@ const Header = () => {
         <div>
           <S.StyledNavegacao>
             <Categorias/>
-            
             <Input placeholder="O que você esta procurando?" />
             <Carrinho />
           </S.StyledNavegacao>

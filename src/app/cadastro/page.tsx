@@ -2,20 +2,18 @@
 import styled from "styled-components";
 
 const StyledGeral = styled.div`
-  /* background-color: green; */
   min-width: 100vw;
   min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  background-color: green;
   div{
-    
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  flex-direction: column;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
   }
 `;
 
@@ -46,15 +44,6 @@ const Input = styled.input`
 
 const Button = styled.button`
   background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-const CadastroGeral = styled.div`
-
   color: white;
   padding: 10px 20px;
   font-size: 16px;
@@ -95,31 +84,17 @@ const LoginForm: React.FC = () => {
             required
           />
         </InputWrapper>
-
-        <CadastroGeral>
         <Button type="submit">Login</Button>
-
-        </CadastroGeral>
-
-        
-        
       </form>
     </FormContainer>
   );
 };
 
 const Cadastro: React.FC = () => {
-
-    const [showLoginCard, setShowLoginCard] = useState(false); // Estado para controlar a exibição do card de login
-
-    const handleLoginIconClick = () => {
-      setShowLoginCard(!showLoginCard); // Altera o estado para mostrar ou esconder o card de login
-    };
-
   return (
     <StyledGeral>
       <div>
-        <h1>Acessar sua Conta</h1>
+        <h1>Login</h1>
         <LoginForm />
       </div>
     </StyledGeral>

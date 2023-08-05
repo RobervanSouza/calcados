@@ -35,6 +35,7 @@ const Itens = styled.li<CategoriaProps>`
 const LinkStyled = styled(Link)`
   text-decoration: none; /* Remover sublinhado */
   color: black; /* Alterar cor do texto para preto */
+  cursor: pointer;
 `;
 
 const Categorias = () => {
@@ -54,19 +55,19 @@ const Categorias = () => {
         <Itens 
         selected={type === TypesCategoria.INFANTIL}
         onClick={() => HandleClick(TypesCategoria.INFANTIL)}
-        >INFANTIL</Itens>
+        > <LinkStyled href={"/infantil"}  > INFANTIL </LinkStyled>  </Itens>
         <Itens
         selected={type === TypesCategoria.FEMININO}
         onClick={() => HandleClick(TypesCategoria.FEMININO)}
-        >FEMININO</Itens>
+        > <LinkStyled href={"/feminino"}  > FEMININO </LinkStyled>  </Itens>
         <Itens 
         selected={type === TypesCategoria.LANÇAMENTOS}
         onClick={() => HandleClick(TypesCategoria.LANÇAMENTOS)}
-        >LANÇAMENTOS</Itens>
+        > <LinkStyled href={"/lancamento"}  > LANÇAMENTOS </LinkStyled>  </Itens>
         <Itens 
         selected={type === TypesCategoria.PROMOÇÃO}
         onClick={() => HandleClick(TypesCategoria.PROMOÇÃO)}
-        >PROMOÇÃO</Itens>
+        > <LinkStyled href={"/promocao"}  > PROMOÇÃO </LinkStyled>  </Itens>
       </Categoria>
     </div>
   );

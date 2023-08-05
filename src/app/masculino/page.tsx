@@ -47,7 +47,7 @@ const ContainerGeral = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 1rem;
-  gap: 12px
+  gap: 12px;
 `;
 const CardContainer = styled.div`
   width: 250px;
@@ -195,6 +195,12 @@ const StiledLancamento = styled.div`
   animation: ${pulseAnimation as unknown as string} 8s infinite;
 `;
 
+const LinkStyled = styled(Link)`
+  text-decoration: none;
+  color: blue;
+  cursor: point;
+`;
+
 const CalcadoMasculino: React.FC = () => {
   const [calcadoMasculinoList, setCalcadoMasculinoList] = useState<
     CalcadoMasculino[]
@@ -230,73 +236,67 @@ const CalcadoMasculino: React.FC = () => {
 
   return (
     <>
-
-
-    <ContainerGeral>
-   
-
-
-      {loading ? (
+      <ContainerGeral>
+        {loading ? (
           <LoadingSpinner />
-          ) : (
-              calcadoMasculinoList.map((calcado) => {
-                  const precoComDesconto = calcularPrecoComDesconto(
-                      calcado.preco,
-                      calcado.desconto
-                      );
-                      
-                      const valorParcela = calcularParcelas(
-                          precoComDesconto,
-                          calcado.parcelas
-                          );
-                          
-                          return (
-                              <CardContainer key={calcado._id}>
-              {calcado.desconto > 0 && (
+        ) : (
+          calcadoMasculinoList.map((calcado) => {
+            const precoComDesconto = calcularPrecoComDesconto(
+              calcado.preco,
+              calcado.desconto
+            );
+
+            const valorParcela = calcularParcelas(
+              precoComDesconto,
+              calcado.parcelas
+            );
+
+            return (
+              <CardContainer key={calcado._id}>
+                {calcado.desconto > 0 && (
                   <StiledDesconto>
-                  <div>
-                    <span>
-                      <p>{calcado.desconto}%</p>
-                      <p>OFF</p>
-                    </span>
-                  </div>
-                </StiledDesconto>
-              )}
+                    <div>
+                      <span>
+                        <p>{calcado.desconto}%</p>
+                        <p>OFF</p>
+                      </span>
+                    </div>
+                  </StiledDesconto>
+                )}
 
-              {calcado.lancamento && (
+                {calcado.lancamento && (
                   <StiledLancamento>
-                  <p>LANÇAMENTO</p>
-                </StiledLancamento>
-              )}
+                    <p>LANÇAMENTO</p>
+                  </StiledLancamento>
+                )}
 
-              <ImageWrapper>
-                <CardImage src={calcado.imageUrl[0]} alt={calcado.nome} />
-              </ImageWrapper>
-              <CardTitle>{calcado.nome}</CardTitle>
+                <ImageWrapper>
+                  <CardImage src={calcado.imageUrl[0]} alt={calcado.nome} />
+                </ImageWrapper>
+                <CardTitle>{calcado.nome}</CardTitle>
 
-              {calcado.desconto > 0 && (
-                <CardPrecoOriginal>
-                  <p> De: R${calcado.preco.toFixed(2)}</p>
-                </CardPrecoOriginal>
-              )}
+                {calcado.desconto > 0 && (
+                  <CardPrecoOriginal>
+                    <p> De: R${calcado.preco.toFixed(2)}</p>
+                  </CardPrecoOriginal>
+                )}
 
-              <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
+                <CardPrice>Por: R${precoComDesconto.toFixed(2)}</CardPrice>
 
-              {calcado.parcelas > 0 && ( // Only render if there are more than 1 parcel
-                <CardParcelas>
-                  {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
-                </CardParcelas>
-              )}
+                {calcado.parcelas > 0 && ( // Only render if there are more than 1 parcel
+                  <CardParcelas>
+                    {calcado.parcelas}x de R${valorParcela.toFixed(2)} Sem juros
+                  </CardParcelas>
+                )}
 
-              <Link href={`/detalhes?id=${calcado._id}`}>Ver detalhes</Link>
-            </CardContainer>
-          );
-        })
+                <LinkStyled href={`/detalhes?id=${calcado._id}`}>
+                  Mais detalhes
+                </LinkStyled>
+              </CardContainer>
+            );
+          })
         )}
-   
-        
-    </ContainerGeral>
-
+      </ContainerGeral>
     </>
   );
 };

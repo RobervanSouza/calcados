@@ -41,6 +41,14 @@ const LoadingSpinner = styled.div`
   }
 `;
 
+const ContainerGeral = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  gap: 12px
+`;
 const CardContainer = styled.div`
   width: 250px;
   height: 340px;
@@ -163,7 +171,6 @@ const pulseAnimation = keyframes`
   }
 `;
 
-
 const StiledLancamento = styled.div`
   display: flex;
   align-items: center;
@@ -203,19 +210,15 @@ const CalcadoMasculino: React.FC = () => {
         );
         const data = response.data.data;
         setCalcadoMasculinoList(data);
-         setLoading(false);
+        setLoading(false);
       } catch (error) {
         console.error("Erro ao obter os dados do calcadoMasculino:", error);
-         setLoading(false);
-
+        setLoading(false);
       }
     };
 
     fetchCalcadoMasculino();
   }, []);
-
-
-  
 
   const calcularPrecoComDesconto = (preco: number, desconto: number) => {
     return preco * (1 - desconto / 100);
@@ -227,25 +230,30 @@ const CalcadoMasculino: React.FC = () => {
 
   return (
     <>
+
+
+    <ContainerGeral>
+   
+
+
       {loading ? (
-        <LoadingSpinner/>
-        
-      ) : (
-        calcadoMasculinoList.map((calcado) => {
-          const precoComDesconto = calcularPrecoComDesconto(
-            calcado.preco,
-            calcado.desconto
-          );
-
-          const valorParcela = calcularParcelas(
-            precoComDesconto,
-            calcado.parcelas
-          );
-
-          return (
-            <CardContainer key={calcado._id}>
+          <LoadingSpinner />
+          ) : (
+              calcadoMasculinoList.map((calcado) => {
+                  const precoComDesconto = calcularPrecoComDesconto(
+                      calcado.preco,
+                      calcado.desconto
+                      );
+                      
+                      const valorParcela = calcularParcelas(
+                          precoComDesconto,
+                          calcado.parcelas
+                          );
+                          
+                          return (
+                              <CardContainer key={calcado._id}>
               {calcado.desconto > 0 && (
-                <StiledDesconto>
+                  <StiledDesconto>
                   <div>
                     <span>
                       <p>{calcado.desconto}%</p>
@@ -256,7 +264,7 @@ const CalcadoMasculino: React.FC = () => {
               )}
 
               {calcado.lancamento && (
-                <StiledLancamento>
+                  <StiledLancamento>
                   <p>LANÇAMENTO</p>
                 </StiledLancamento>
               )}
@@ -284,10 +292,13 @@ const CalcadoMasculino: React.FC = () => {
             </CardContainer>
           );
         })
-      )}
+        )}
+   
+        
+    </ContainerGeral>
+
     </>
   );
 };
 
 export default CalcadoMasculino;
- 

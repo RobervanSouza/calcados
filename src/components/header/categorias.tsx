@@ -2,6 +2,7 @@
 
 import CategoriaHooks from "@/hooks/categoria";
 import { TypesCategoria } from "@/types/types-categoria";
+import Link from "next/link";
 import React from "react";
 import { styled } from "styled-components";
 
@@ -31,6 +32,11 @@ const Itens = styled.li<CategoriaProps>`
   cursor: pointer;
 `;
 
+const LinkStyled = styled(Link)`
+  text-decoration: none; /* Remover sublinhado */
+  color: black; /* Alterar cor do texto para preto */
+`;
+
 const Categorias = () => {
   const { type, setType} = CategoriaHooks();
 
@@ -44,7 +50,7 @@ const Categorias = () => {
         <Itens 
         selected={type === TypesCategoria.MASCULINO}
         onClick={() => HandleClick(TypesCategoria.MASCULINO)}
-        >MASCULINO</Itens>
+        > <LinkStyled href={"/masculino"}  > MASCULINO </LinkStyled> </Itens>
         <Itens 
         selected={type === TypesCategoria.INFANTIL}
         onClick={() => HandleClick(TypesCategoria.INFANTIL)}

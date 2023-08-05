@@ -5,6 +5,7 @@ import { Saira } from 'next/font/google'
 import CategoriaProvider from '@/context/categoria'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { DefaultProviders } from '@/components/default-providers'
+import Login from './login/page'
 
 const saira = Saira({ 
   weight: ['300', '400', '500', '700' ],
@@ -29,8 +30,6 @@ export default function RootLayout({
   const client = new QueryClient();
 
   return (
-    
-
     <html lang="pt-br">
       <body className={saira.className}>
         <DefaultProviders>
@@ -39,7 +38,5 @@ export default function RootLayout({
         </DefaultProviders>
       </body>
     </html>
-    
-
   );
 }

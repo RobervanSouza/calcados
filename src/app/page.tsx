@@ -3,13 +3,11 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import Categorias from "@/components/header/categorias";
 import MaisVendidos from "@/components/maisVendidos/maisVendido";
-import CalcadoMasculino from "@/components/masculino/masculino";
+
 import { styled } from "styled-components";
 import Link from "next/link";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Login from "./login/page";
-
-
 
 export const StyledContainer = styled.div`
   padding: 1rem;
@@ -21,7 +19,6 @@ export const StyledContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-
 export default function Home() {
   const client = new QueryClient();
 
@@ -29,13 +26,12 @@ export default function Home() {
     <main>
       <>
         <QueryClientProvider client={client}>
-        <MaisVendidos />
-        <StyledContainer>
-          <CalcadoMasculino />
-        </StyledContainer>
-        <Login/>
-    </QueryClientProvider>
+          <MaisVendidos />
+          <StyledContainer>
+            
+          </StyledContainer>         
+        </QueryClientProvider>
       </>
-      </main>
+    </main>
   );
 }

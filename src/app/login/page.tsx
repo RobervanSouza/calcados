@@ -1,4 +1,4 @@
-"use client";import React, { useState } from "react";
+"use client";import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const StyledGeral = styled.div`
@@ -8,34 +8,41 @@ const StyledGeral = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  
   flex-wrap: wrap;
-  div{
-    
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  flex-direction: column;
+  
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
   }
 `;
 
 const FormContainer = styled.div`
   background-color: white;
-  padding: 20px;
+  padding: 40px;
   border-radius: 8px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: 1px solid black;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* background-color: red; */
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 15px;
-`;
+  `;
 
 const Label = styled.label`
   font-size: 16px;
   margin-bottom: 5px;
-`;
+  `;
 
 const Input = styled.input`
   padding: 10px;
@@ -63,9 +70,49 @@ const CadastroGeral = styled.div`
   cursor: pointer;
 `;
 
+
+
+
+// ... (mesmos estilos e componentes definidos anteriormente)
+
+interface PasswordRequirementsProps {
+  valid: boolean;
+}
+
+const PasswordRequirements = styled.div<PasswordRequirementsProps>`
+  font-size: 14px;
+  color: ${({ valid }) => (valid ? "green" : "red")};
+`;
+
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordIsValid, setPasswordIsValid] = useState(false); // Estado para acompanhar a validade da senha
+
+  const checkPasswordRequirements = (password: string) => {
+    const hasMinimumLength = password.length >= 8;
+    const hasUppercaseLetter = /[A-Z]/.test(password);
+    const hasSpecialCharacter = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(
+      password
+    );
+    const hasNumber = /\d/.test(password);
+
+    return (
+      hasMinimumLength &&
+      hasUppercaseLetter &&
+      hasSpecialCharacter &&
+      hasNumber
+    );
+  };
+
+  useEffect(() => {
+    setPasswordIsValid(checkPasswordRequirements(password));
+  }, [password]);
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -78,35 +125,48 @@ const LoginForm: React.FC = () => {
     <FormContainer>
       <form onSubmit={handleSubmit}>
         <InputWrapper>
-          <Label>Email:</Label>
           <Input
             type="email"
             value={email}
+            placeholder="Digite seu Email"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </InputWrapper>
         <InputWrapper>
-          <Label>Senha:</Label>
           <Input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Digite sua Senha"
+            onChange={handlePasswordChange}
             required
+            style={{
+              borderColor: passwordIsValid ? "green" : "#ccc",
+            }}
           />
         </InputWrapper>
-
+        <PasswordRequirements valid={passwordIsValid}>
+          {password.length >= 8
+            ? "✓ no mínimo 8 dígitos; "
+            : "x no mínimo 8 dígitos; "}
+          {/[A-Z]/.test(password)
+            ? "✓ tem que ter uma letra maiúscula; "
+            : "x tem que ter uma letra maiúscula; "}
+          {/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password)
+            ? "✓ tem que ter um caractere especial; "
+            : "x tem que ter um caractere especial; "}
+          {/\d/.test(password) ? "✓ tem que ter um número" : "x tem que ter um número"}
+        </PasswordRequirements>
         <CadastroGeral>
-        <Button type="submit">Login</Button>
-
+          <Button type="submit">Login</Button>
         </CadastroGeral>
-
-        
-        
       </form>
     </FormContainer>
   );
 };
+
+// ... (restante do código é o mesmo)
+
 
 const Cadastro: React.FC = () => {
 

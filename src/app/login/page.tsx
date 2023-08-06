@@ -1,4 +1,6 @@
-"use client";import React, { useEffect, useState } from "react";
+"use client";
+import PasswordInput from "@/components/senha/senha";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const StyledGeral = styled.div`
@@ -8,9 +10,8 @@ const StyledGeral = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   flex-wrap: wrap;
-  
 
   div {
     display: flex;
@@ -23,13 +24,16 @@ const StyledGeral = styled.div`
 
 const FormContainer = styled.div`
   background-color: white;
-  padding: 40px;
+  width: 434px;
+  height: 434px;
   border-radius: 8px;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
   border: 1px solid black;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-/* background-color: red; */
+  /* background-color: #b0f694; */
 `;
 
 const InputWrapper = styled.div`
@@ -37,12 +41,12 @@ const InputWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 15px;
-  `;
+`;
 
 const Label = styled.label`
   font-size: 16px;
   margin-bottom: 5px;
-  `;
+`;
 
 const Input = styled.input`
   padding: 10px;
@@ -61,7 +65,6 @@ const Button = styled.button`
   cursor: pointer;
 `;
 const CadastroGeral = styled.div`
-
   color: white;
   padding: 10px 20px;
   font-size: 16px;
@@ -69,9 +72,6 @@ const CadastroGeral = styled.div`
   border-radius: 4px;
   cursor: pointer;
 `;
-
-
-
 
 // ... (mesmos estilos e componentes definidos anteriormente)
 
@@ -82,12 +82,35 @@ interface PasswordRequirementsProps {
 const PasswordRequirements = styled.div<PasswordRequirementsProps>`
   font-size: 14px;
   color: ${({ valid }) => (valid ? "green" : "red")};
+  width: 334px;
+  height: 134px;
+  p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+  }
 `;
+const Requisitos = styled.div`
+  /* background-color: #007bff; */
+
+  width: 334px;
+  height: 134px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+const RequisitoItem = styled.span<{ valid: boolean }>`
+  color: ${({ valid }) => (valid ? "green" : "red")};
+`;
+
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordIsValid, setPasswordIsValid] = useState(false); // Estado para acompanhar a validade da senha
+  const [passwordIsValid, setPasswordIsValid] = useState(false); 
 
   const checkPasswordRequirements = (password: string) => {
     const hasMinimumLength = password.length >= 8;
@@ -98,10 +121,7 @@ const LoginForm: React.FC = () => {
     const hasNumber = /\d/.test(password);
 
     return (
-      hasMinimumLength &&
-      hasUppercaseLetter &&
-      hasSpecialCharacter &&
-      hasNumber
+      hasMinimumLength && hasUppercaseLetter && hasSpecialCharacter && hasNumber
     );
   };
 
@@ -121,6 +141,10 @@ const LoginForm: React.FC = () => {
     console.log("Password:", password);
   };
 
+  const specialCharacters = "!@#$%^&*()_-=[]{};':\"|,.<>/?";
+
+
+
   return (
     <FormContainer>
       <form onSubmit={handleSubmit}>
@@ -134,47 +158,56 @@ const LoginForm: React.FC = () => {
           />
         </InputWrapper>
         <InputWrapper>
-          <Input
-            type="password"
+          <PasswordInput
+           
             value={password}
-            placeholder="Digite sua Senha"
+           
             onChange={handlePasswordChange}
-            required
-            style={{
-              borderColor: passwordIsValid ? "green" : "#ccc",
-            }}
+           
+           
           />
         </InputWrapper>
+
         <PasswordRequirements valid={passwordIsValid}>
-          {password.length >= 8
-            ? "✓ no mínimo 8 dígitos; "
-            : "x no mínimo 8 dígitos; "}
-          {/[A-Z]/.test(password)
-            ? "✓ tem que ter uma letra maiúscula; "
-            : "x tem que ter uma letra maiúscula; "}
-          {/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password)
-            ? "✓ tem que ter um caractere especial; "
-            : "x tem que ter um caractere especial; "}
-          {/\d/.test(password) ? "✓ tem que ter um número" : "x tem que ter um número"}
+          <Requisitos>
+            <p>
+              <RequisitoItem
+                valid={/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password)}>
+                {/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password)
+                  ? "✓"
+                  : "x"}{" "}
+                Caractere Sujeridos: `${specialCharacters}`;
+              </RequisitoItem>{" "}
+              <RequisitoItem valid={/\d/.test(password)}>
+                {/\d/.test(password) ? "✓" : "x"} Tem que ter números
+              </RequisitoItem>
+              <RequisitoItem valid={password.length >= 8}>
+                {password.length >= 8 ? "✓" : "x"} Minimo 08 dígitos;
+              </RequisitoItem>{" "}
+              <RequisitoItem valid={/[A-Z]/.test(password)}>
+                {/[A-Z]/.test(password) ? "✓" : "x"} Letras maiúscula;
+              </RequisitoItem>{" "}
+            </p>
+          </Requisitos>
         </PasswordRequirements>
         <CadastroGeral>
           <Button type="submit">Login</Button>
         </CadastroGeral>
+        <h4>Ainda não tem conta?</h4>
       </form>
+        <Button>Registrar-se</Button>
     </FormContainer>
   );
 };
 
 // ... (restante do código é o mesmo)
 
-
 const Cadastro: React.FC = () => {
+  const [showLoginCard, setShowLoginCard] = useState(false); // Estado para controlar a exibição do card de login
 
-    const [showLoginCard, setShowLoginCard] = useState(false); // Estado para controlar a exibição do card de login
-
-    const handleLoginIconClick = () => {
-      setShowLoginCard(!showLoginCard); // Altera o estado para mostrar ou esconder o card de login
-    };
+  const handleLoginIconClick = () => {
+    setShowLoginCard(!showLoginCard); // Altera o estado para mostrar ou esconder o card de login
+  };
 
   return (
     <StyledGeral>

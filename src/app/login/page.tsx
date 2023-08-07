@@ -1,5 +1,6 @@
 "use client";
 import PasswordInput from "@/components/senha/senha";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -105,7 +106,11 @@ const Requisitos = styled.div`
 const RequisitoItem = styled.span<{ valid: boolean }>`
   color: ${({ valid }) => (valid ? "green" : "red")};
 `;
-
+const LinkStyled = styled(Link)`
+  text-decoration: none;
+  color: white;
+  cursor: point;
+`;
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -195,12 +200,12 @@ const LoginForm: React.FC = () => {
         </CadastroGeral>
         <h4>Ainda não tem conta?</h4>
       </form>
-        <Button>Registrar-se</Button>
+        <Button> <LinkStyled href={"/cadastro"} >Cadastrar</LinkStyled></Button>
     </FormContainer>
   );
 };
 
-// ... (restante do código é o mesmo)
+
 
 const Cadastro: React.FC = () => {
   const [showLoginCard, setShowLoginCard] = useState(false); // Estado para controlar a exibição do card de login

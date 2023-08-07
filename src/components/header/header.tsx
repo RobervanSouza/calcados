@@ -29,8 +29,8 @@ const Header = () => {
         <div>
           <S.StyledNavegacao>
             <Categorias/>
-            <Input placeholder="O que você esta procurando?" />
-              <Link href={`/login`}> <LoginIcone/> </Link>
+            {/* <Input placeholder="O que você esta procurando?" /> */}
+              {/* <Link href={`/login`}> <LoginIcone/> </Link> */}
             <Carrinho />
           </S.StyledNavegacao>
         </div>

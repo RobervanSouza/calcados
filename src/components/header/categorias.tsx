@@ -3,8 +3,10 @@
 import CategoriaHooks from "@/hooks/categoria";
 import { TypesCategoria } from "@/types/types-categoria";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { styled } from "styled-components";
+import LoginIcone from './login';
 
 interface CategoriaProps {
   selected: boolean;
@@ -38,6 +40,11 @@ const LinkStyled = styled(Link)`
   cursor: pointer;
 `;
 
+interface CategoriasProps {
+  currentPath: string;
+}
+
+
 const Categorias = () => {
   const { type, setType} = CategoriaHooks();
 
@@ -68,6 +75,10 @@ const Categorias = () => {
         selected={type === TypesCategoria.PROMOÇÃO}
         onClick={() => HandleClick(TypesCategoria.PROMOÇÃO)}
         > <LinkStyled href={"/promocao"}  > PROMOÇÃO </LinkStyled>  </Itens>
+        <Itens 
+        selected={type === TypesCategoria.LoginIcone}
+        onClick={() => HandleClick(TypesCategoria.LoginIcone)}
+        > <LinkStyled href={"/login"}  > <LoginIcone /> </LinkStyled>  </Itens>
       </Categoria>
     </div>
   );

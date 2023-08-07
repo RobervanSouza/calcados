@@ -4,5 +4,5 @@ export enum TypesCategoria{
     "FEMININO",
     "LANÇAMENTOS",
     "PROMOÇÃO",
-
+    "LoginIcone"
 }

@@ -27,9 +27,7 @@ export default function Home() {
       <>
         <QueryClientProvider client={client}>
           <MaisVendidos />
-          <StyledContainer>
-            
-          </StyledContainer>         
+          <StyledContainer>Pagina home</StyledContainer>
         </QueryClientProvider>
       </>
     </main>

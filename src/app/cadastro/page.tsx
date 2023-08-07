@@ -1,7 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import PasswordInput from "@/components/senha/senha";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+const apiUrl = "https://api-back-kappa.vercel.app/cadastro";
+
 
 const CadastroContainer = styled.div`
   display: flex;
@@ -56,6 +60,43 @@ const Select = styled.select`
 `;
 
 
+interface PasswordRequirementsProps {
+  valid: boolean;
+}
+
+const PasswordRequirements = styled.div<PasswordRequirementsProps>`
+  font-size: 14px;
+  color: ${({ valid }) => (valid ? "green" : "red")};
+  width: 334px;
+  height: 134px;
+  p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+  }
+`;
+const Requisitos = styled.div`
+  /* background-color: #007bff; */
+
+  width: 334px;
+  height: 134px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+const RequisitoItem = styled.span<{ valid: boolean }>`
+  color: ${({ valid }) => (valid ? "green" : "red")};
+`;
+// const LinkStyled = styled(Link)`
+//   text-decoration: none;
+//   color: white;
+//   cursor: point;
+// `;
+
+
 const diasOptions = [
   { value: "", label: "* Dia", disabled: true },
   { value: "01", label: "01" },
@@ -92,7 +133,7 @@ const diasOptions = [
 ];
 
 const mesesOptions = [
-  { value: "", label: "* Mês" , disabled: true},
+  { value: "", label: "* Mês", disabled: true },
   { value: "01", label: "Janeiro" },
   { value: "02", label: "Fevereiro" },
   { value: "03", label: "Março" },
@@ -184,10 +225,42 @@ const anosOptions = [
   { value: "1951", label: "1951" },
   { value: "1950", label: "1950" },
 ];
+const estadosOptions = [
+  { value: "", label: "* Estado", disabled: true },
+  { value: "AC", label: "Acre" },
+  { value: "AL", label: "Alagoas" },
+  { value: "AP", label: "Amapá" },
+  { value: "AM", label: "Amazonas" },
+  { value: "BA", label: "Bahia" },
+  { value: "CE", label: "Ceará" },
+  { value: "DF", label: "Distrito Federal" },
+  { value: "ES", label: "Espírito Santo" },
+  { value: "GO", label: "Goiás" },
+  { value: "MA", label: "Maranhão" },
+  { value: "MT", label: "Mato Grosso" },
+  { value: "MS", label: "Mato Grosso do Sul" },
+  { value: "MG", label: "Minas Gerais" },
+  { value: "PA", label: "Pará" },
+  { value: "PB", label: "Paraíba" },
+  { value: "PR", label: "Paraná" },
+  { value: "PE", label: "Pernambuco" },
+  { value: "PI", label: "Piauí" },
+  { value: "RJ", label: "Rio de Janeiro" },
+  { value: "RN", label: "Rio Grande do Norte" },
+  { value: "RS", label: "Rio Grande do Sul" },
+  { value: "RO", label: "Rondônia" },
+  { value: "RR", label: "Roraima" },
+  { value: "SC", label: "Santa Catarina" },
+  { value: "SP", label: "São Paulo" },
+  { value: "SE", label: "Sergipe" },
+  { value: "TO", label: "Tocantins" },
+];
 
 const Cadastro = () => {
   const [formData, setFormData] = useState({
     nome: "",
+    email: "",
+    senha: "",
     sobrenome: "",
     sexo: "",
     celular: "",
@@ -202,12 +275,162 @@ const Cadastro = () => {
     cep: "",
   });
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    // Aqui você pode adicionar a lógica para enviar os dados para o backend
-    console.log(formData);
+  
+
+  const formatarNumero = (numero: any) => {
+    const cleaned = ("" + numero).replace(/\D/g, "");
+    const match = cleaned.match(/^(\d{0,2})(\d{0,5})(\d{0,4})$/);
+    if (!match) return "";
+    return (
+      (match[1] ? "(" + match[1] : "") +
+      (match[2] ? ") " + match[2] : "") +
+      (match[3] ? "-" + match[3] : "")
+    );
   };
 
+  const handleCelularChange = (e: any) => {
+    const numeroFormatado = formatarNumero(e.target.value);
+    setFormData({ ...formData, celular: numeroFormatado });
+  };
+
+
+    const formatarCPF = (cpf: any) => {
+    const cleaned = ('' + cpf).replace(/\D/g, '');
+    const match = cleaned.match(/(\d{0,3})(\d{0,3})(\d{0,3})(\d{0,2})/);
+    if (!match) return '';
+    return (!match[2] ? match[1] : match[1] + '.' + match[2]) +
+      (match[3] ? '.' + match[3] : '') +
+      (match[4] ? '-' + match[4] : '');
+  };
+
+  const handleCPFChange = (e:any) => {
+    const cpfFormatado = formatarCPF(e.target.value);
+    setFormData({ ...formData, cpf: cpfFormatado });
+  };
+
+  
+const formatCEP = (cep: any) => {
+  if (cep.length <= 5) {
+    return cep;
+  } else {
+    return `${cep.slice(0, 5)}-${cep.slice(5)}`;
+  }
+};
+ const handleCEPChange = (e: any) => {
+   const rawValue = e.target.value;
+   const cep = rawValue.replace(/\D/g, ""); // Remove caracteres não numéricos
+   const formattedCEP = formatCEP(cep); // Função para formatar o CEP
+
+   setFormData({ ...formData, cep: formattedCEP });
+ };
+
+  const [password, setPassword] = useState("");
+  const [passwordIsValid, setPasswordIsValid] = useState(false); 
+
+  const checkPasswordRequirements = (password: string) => {
+    const hasMinimumLength = password.length >= 8;
+    const hasUppercaseLetter = /[A-Z]/.test(password);
+    const hasSpecialCharacter = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(
+      password
+    );
+    const hasNumber = /\d/.test(password);
+
+    return (
+      hasMinimumLength && hasUppercaseLetter && hasSpecialCharacter && hasNumber
+    );
+  };
+
+  useEffect(() => {
+    setPasswordIsValid(checkPasswordRequirements(password));
+  }, [password]);
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+  };
+
+  // const handleSubmitSenha = (event: React.FormEvent) => {
+  //   event.preventDefault();
+  
+  // };
+
+  const specialCharacters = "!@#$%^&*()_-=[]{};':\"|,.<>/?";
+    const initialFormData = {
+      nome: "",
+      email: "",
+      senha: "",
+      sobrenome: "",
+      sexo: "",
+      celular: "",
+      rua: "",
+      bairro: "",
+      cidade: "",
+      estado: "",
+      cpf: "",
+      diaNascimento: "",
+      mesNascimento: "",
+      anoNascimento: "",
+      cep: "",
+    };
+ const [formData1, setFormData1] = useState(initialFormData);
+ const handleSubmit = async (event: any) => {
+   event.preventDefault();
+
+   // Formatar os dados no formato esperado pela API
+  const formattedData = {
+    nome: formData.nome,
+    email: formData.email,
+    senha: formData.senha,
+    sobrenome: formData.sobrenome,
+    sexo: formData.sexo,
+    celular: formData.celular !== "" ? parseInt(formData.celular) : undefined,
+    rua: formData.rua,
+    bairro: formData.bairro,
+    cidade: formData.cidade,
+    estado: formData.estado,
+    cpf: formData.cpf !== "" ? parseInt(formData.cpf) : undefined,
+    diaNascimento:
+      formData.diaNascimento !== ""
+        ? parseInt(formData.diaNascimento)
+        : undefined,
+    mesNascimento:
+      formData.mesNascimento !== ""
+        ? parseInt(formData.mesNascimento)
+        : undefined,
+    anoNascimento:
+      formData.anoNascimento !== ""
+        ? parseInt(formData.anoNascimento)
+        : undefined,
+    cep: formData.cep !== "" ? parseInt(formData.cep) : undefined,
+  };
+
+  console.log("Dados a serem enviados:", formattedData);
+try {
+      const response = await axios.post(apiUrl, formattedData);
+      console.log("Resposta da API:", response.data);
+       setFormData({
+        nome: "",
+        email: "",
+        senha: "",
+        sobrenome: "",
+        sexo: "",
+        celular: "",
+        rua: "",
+        bairro: "",
+        cidade: "",
+        estado: "",
+        cpf: "",
+        diaNascimento: "",
+        mesNascimento: "",
+        anoNascimento: "",
+        cep: "",
+      });
+    } catch (error) {
+      console.error("Erro ao cadastrar novo usuário:", error);
+    }
+ };
+
+ 
   return (
     <CadastroContainer>
       <Form onSubmit={handleSubmit}>
@@ -247,7 +470,10 @@ const Cadastro = () => {
               }
               required>
               {diasOptions.map((option) => (
-                <option key={option.value} value={option.value}  disabled={option.disabled} >
+                <option
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}>
                   {option.label}
                 </option>
               ))}
@@ -261,10 +487,11 @@ const Cadastro = () => {
               }
               required>
               {mesesOptions.map((option) => (
-               
-                <option key={option.value} value={option.value} disabled={option.disabled}   >
+                <option
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}>
                   {option.label}
-                  
                 </option>
               ))}
             </Select>
@@ -277,9 +504,10 @@ const Cadastro = () => {
               }
               required>
               {anosOptions.map((option) => (
-                <option key={option.value} value={option.value}
-                disabled={option.disabled} 
-                >
+                <option
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}>
                   {option.label}
                 </option>
               ))}
@@ -288,6 +516,8 @@ const Cadastro = () => {
         </Row>
         <Row>
           <Column>
+            <Label>Sexo</Label>
+
             <Input
               as="select"
               value={formData.sexo}
@@ -303,21 +533,166 @@ const Cadastro = () => {
             </Input>
           </Column>
           <Column>
-            <Label>Sobrenome</Label>
+            <Label>Contato</Label>
             <Input
               type="text"
-              placeholder="Digite seu Sobrenome"
-              value={formData.sobrenome}
+              placeholder="(XX) XXXXX-XXXX"
+              value={formData.celular}
+              onChange={handleCelularChange}
+              required
+            />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Label>CPF</Label>
+            <Input
+              type="text"
+              placeholder="Digite seu CPF"
+              value={formData.cpf}
+              onChange={handleCPFChange}
+              required
+            />
+          </Column>{" "}
+          <Column>
+            <Label>Informe seu CEP</Label>
+            <Input
+              type="text"
+              placeholder="Digite seu CEP"
+              value={formData.cep}
+              onChange={handleCEPChange}
+              required
+            />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Label>Rua</Label>
+            <Input
+              type="text"
+              placeholder="Digite nome da Rua"
+              value={formData.rua}
               onChange={(e) =>
-                setFormData({ ...formData, sobrenome: e.target.value })
+                setFormData({ ...formData, rua: e.target.value })
+              }
+              required
+            />
+          </Column>
+          <Column>
+            <Label>Bairro</Label>
+            <Input
+              type="text"
+              placeholder="Digite nome do Bairro"
+              value={formData.bairro}
+              onChange={(e) =>
+                setFormData({ ...formData, bairro: e.target.value })
               }
               required
             />
           </Column>
         </Row>
-        <Row></Row>
-        <Row></Row>
-        <Row></Row>
+        <Row>
+          {" "}
+          <Column>
+            <Label>Cidade</Label>
+            <Input
+              type="text"
+              placeholder="Digite da Cidade"
+              value={formData.cidade}
+              onChange={(e) =>
+                setFormData({ ...formData, cidade: e.target.value })
+              }
+              required
+            />
+          </Column>
+          <Column>
+            <Label>Estado</Label>
+            <Select
+              value={formData.estado}
+              onChange={(e) =>
+                setFormData({ ...formData, estado: e.target.value })
+              }
+              required>
+              {estadosOptions.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                  disabled={option.disabled}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Label>Email</Label>
+            <Input
+              type="text"
+              placeholder="Digite seu Email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              required
+            />
+          </Column>
+          <Column>
+            <Input
+              type="text"
+              placeholder="Digite senha"
+              value={formData.senha}
+              onChange={(e) =>
+                setFormData({ ...formData, senha: e.target.value })
+              }
+              required
+            />
+          </Column>
+       
+        </Row>
+        {/* <Row>
+            <Column>
+            <Label>Senha</Label>
+            
+            <PasswordInput
+           
+            value={password}
+           
+            onChange={handlePasswordChange}
+           
+           
+          />
+            
+          </Column>
+       
+        </Row>
+        <Row>
+   <Column>
+          
+              <PasswordRequirements valid={passwordIsValid}>
+          <Requisitos>
+            <p>
+              <RequisitoItem
+                valid={/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password)}>
+                {/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password)
+                  ? "✓"
+                  : "x"}{" "}
+                Caractere Sujeridos: `${specialCharacters}`;
+              </RequisitoItem>{" "}
+              <RequisitoItem valid={/\d/.test(password)}>
+                {/\d/.test(password) ? "✓" : "x"} Tem que ter números
+              </RequisitoItem>
+              <RequisitoItem valid={password.length >= 8}>
+                {password.length >= 8 ? "✓" : "x"} Minimo 08 dígitos;
+              </RequisitoItem>{" "}
+              <RequisitoItem valid={/[A-Z]/.test(password)}>
+                {/[A-Z]/.test(password) ? "✓" : "x"} Letras maiúscula;
+              </RequisitoItem>{" "}
+            </p>
+          </Requisitos>
+        </PasswordRequirements></Column>
+        </Row> */}
+
         <Button type="submit">Cadastrar</Button>
       </Form>
     </CadastroContainer>

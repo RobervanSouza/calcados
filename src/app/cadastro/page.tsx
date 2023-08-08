@@ -129,6 +129,9 @@ const RequisitoItem = styled.span<{ valid: boolean }>`
 //   cursor: point;
 // `;
 
+
+
+
 const Cadastro: React.FC<PasswordInputProps> = ({ value, onChange })=> {
   const {
     formData,
@@ -159,6 +162,22 @@ const Cadastro: React.FC<PasswordInputProps> = ({ value, onChange })=> {
     anoNascimento: "",
     cep: "",
   };
+
+   const [password, setPassword] = useState("");
+ 
+
+   // ... (restante do código)
+   const [showPassword, setShowPassword] = useState(false);
+   const [passwordIsValid, setPasswordIsValid] = useState(false); 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+
+   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+     const newPassword = event.target.value;
+     setPassword(newPassword);
+   };
   const [formData1, setFormData1] = useState(initialFormData);
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -424,22 +443,48 @@ const Cadastro: React.FC<PasswordInputProps> = ({ value, onChange })=> {
             />
           </Column>
           <Column>
-            <Input
-              type="text"
-              placeholder="Digite senha"
-              value={formData.senha}
-              onChange={(e) =>
-                setFormData({ ...formData, senha: e.target.value })
-              }
-              required
-            />
+            <PasswordWrapper>
+              <StyledInput
+                type={showPassword ? "text" : "password"}
+                value={formData.senha}
+                onChange={(e) =>
+                  setFormData({ ...formData, senha: e.target.value })
+                }
+                placeholder="Digite sua Senha"
+                style={{
+                  borderColor: passwordIsValid ? "green" : "#ccc",
+                }}
+              />
+              <EyeIcon onClick={togglePasswordVisibility}>
+                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+              </EyeIcon>
+            </PasswordWrapper>
           </Column>
         </Row>
+
         <Row>
-         
-        </Row>
-        <Row>
-         
+          <PasswordRequirements valid={passwordIsValid}>
+            <Requisitos>
+              <p>
+                <RequisitoItem
+                  valid={/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(formData.senha)}>
+                  {/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(formData.senha)
+                    ? "✓"
+                    : "x"}{" "}
+                  Caractere Sujeridos: `${specialCharacters}`;
+                </RequisitoItem>{" "}
+                <RequisitoItem valid={/\d/.test(formData.senha)}>
+                  {/\d/.test(formData.senha) ? "✓" : "x"} Tem que ter números
+                </RequisitoItem>
+                <RequisitoItem valid={formData.senha.length >= 8}>
+                  {formData.senha.length >= 8 ? "✓" : "x"} Minimo 08 dígitos;
+                </RequisitoItem>{" "}
+                <RequisitoItem valid={/[A-Z]/.test(formData.senha)}>
+                  {/[A-Z]/.test(formData.senha) ? "✓" : "x"} Letras maiúscula;
+                </RequisitoItem>{" "}
+              </p>
+            </Requisitos>
+          </PasswordRequirements>
         </Row>
 
         <Button type="submit">Cadastrar</Button>

@@ -46,6 +46,7 @@ const CadastrarUsuario: React.FC = () => {
         </div>
         <button type="submit">Cadastrar</button>
       </form>
+      
     </div>
   );
 };

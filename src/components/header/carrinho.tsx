@@ -27,17 +27,17 @@ export const StyledCount = styled.span`
   margin-top: -51px;
   margin-left: 22px;
 `;
-export const StyledContainer = styled.div`
+export const StyledContainer = styled.div` 
   position: relative;
 `;
 
 export function Carrinho() {
-  const { value } = useLocalStorage("carrinho-itens");
+  const { value } = useLocalStorage<string>("carrinho-itens");
   return (
     <div>
       <StyledContainer>
         <IconeCarrinho />
-        {value.length && <StyledCount> {value.length} </StyledCount>}
+        {value.length > 0 && <StyledCount> {value.length} </StyledCount>}
       </StyledContainer>
       
     </div>

@@ -48,6 +48,7 @@ const ContainerGeral = styled.div`
   flex-wrap: wrap;
   margin-top: 1rem;
   gap: 12px;
+  
 `;
 const CardContainer = styled.div`
   width: 250px;

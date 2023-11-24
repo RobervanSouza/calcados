@@ -27,7 +27,6 @@ export default function RootLayout({
 
 {
 
-  const client = new QueryClient();
 
   return (
     <html lang="pt-br">
